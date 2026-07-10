@@ -13,8 +13,8 @@
 ---
 
 ## 🔗 LINK AKSES UTAMA
-* **Link Live Website (Customer):** [Isi link GitHub Pages / hosting kamu di sini] untuk mengakses toko utama pelanggan.
-* **Link Halaman Admin:** [Isi link yang sama]/Admin/admin_login.html untuk masuk ke panel pengelolaan admin.
+* **Link Live Website (Customer):** https://raivahasnilda.github.io/EveryThingB4/#katalog
+* **Link Halaman Admin:** https://raivahasnilda.github.io/EveryThingB4/Admin/admin_dashboard.html
 * **Link Repository GitHub:** [Isi link repository GitHub kamu di sini] untuk melihat *source code* repositori.
 
 ---
