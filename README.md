@@ -4,10 +4,10 @@
 ---
 
 ### 👤 IDENTITAS MAHASISWA
-* **Nama:** [Isi Nama Kamu]
-* **NIM:** [Isi NIM Kamu]
-* **Mata Kuliah:** [Isi Nama Mata Kuliah]
-* **Program Studi:** [Isi Program Studi]
+* **Nama:** Raiva Hasnilda Fatimah
+* **NIM:** 209250149
+* **Mata Kuliah:** Komputer Aplikasi IT II
+* **Program Studi:** Administrasi Bisnis (ABI 6)
 * **Semester:** Genap 2025/2026
 
 ---
