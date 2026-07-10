@@ -15,8 +15,7 @@
 ## 🔗 LINK AKSES UTAMA
 * **Link Live Website (Customer):** https://raivahasnilda.github.io/EveryThingB4/#katalog
 * **Link Halaman Admin:** https://raivahasnilda.github.io/EveryThingB4/Admin/admin_dashboard.html
-* **Link Repository GitHub:** [Isi link repository GitHub kamu di sini] untuk melihat *source code* repositori.
-
+* **Link Repository GitHub:** https://github.com/raivahasnilda/EveryThingB4
 ---
 
 ## 📝 DESKRIPSI & STRATEGI BISNIS
@@ -33,7 +32,7 @@
     Kami mengusung tiga pilar nilai utama: *Comfort First, Price Transparency,* dan *Seamless Shopping Experience*. Seluruh produk yang tersedia dipilih dengan memperhatikan kualitas bahan dan kenyamanan pemakaian jangka panjang. Di tengah maraknya toko daring yang penuh sesak dan sulit dinavigasi, EverythingsByFour menjamin pengalaman belanja yang ringkas — mulai dari eksplorasi katalog, live chat dengan admin, hingga pelacakan pesanan — semuanya dalam satu alur yang intuitif dan bebas gangguan iklan pihak ketiga.
 
 *   **Segmentasi & Analisis Pasar Sasaran (*Target Market*):**
-    Segmentasi pasar difokuskan pada demografi remaja hingga dewasa muda berusia 16–28 tahun, yang didominasi oleh pelajar, mahasiswa, dan pekerja muda (*early jobbers*). Berdasarkan analisis perilaku konsumen, segmen ini memiliki karakteristik yang sangat aktif di media sosial, mencari outfit kasual estetik dengan harga terjangkau, dan sangat mengandalkan chat langsung untuk memastikan detail produk sebelum membeli. Mereka adalah kelompok yang memprioritaskan kepraktisan transaksi dan kecepatan respons penjual.
+    Segmentasi pasar difokuskan pada demografi remaja hingga dewasa muda berusia 16–28 tahun, yang didominasi oleh pelajar, mahasiswa, dan pekerja muda (*early jobbers*). Berdasarkan analisis perilaku konsumen, segmen ini memiliki karakteristik yang sangat aktif di media sosial, mencari outfit kasual estetik dengan harga terjangkau, dan sangat mengandalkan chat langsung untuk memastikan detail produk sebelum membeli. Mereka adalah kelompok yang memprioritaskan kepraktisan transaksi dan kecepatan respons penjual.  Dan anak-anak usia 2–6 tahun melalui koleksi pakaian yang dirancang dengan mengutamakan kenyamanan, bahan yang lembut, serta desain yang lucu dan modern. Target pasar untuk kategori ini adalah orang tua, terutama ibu muda, yang mencari pakaian berkualitas dan stylish untuk anak mereka melalui platform belanja online.
 
 *   **Analisis Lanskap Kompetitif (*Competitor Analysis*):**
     Di tengah ketatnya persaingan dengan *marketplace* besar dan toko *thrift* daring, EverythingsByFour mengambil ceruk pasar (*niche market*) melalui strategi diferensiasi fokus pada koleksi pastel yang konsisten dan layanan pelanggan yang personal lewat fitur live chat internal. Kelemahan utama kompetitor massal adalah respons chat yang lambat dan tampilan katalog yang generik. Kami mengantisipasi hal tersebut dengan menghadirkan *live chat* bawaan situs (bukan hanya tautan ke WhatsApp eksternal) sehingga admin dapat membalas satu per satu pelanggan secara terstruktur, membangun kedekatan emosional (*brand intimacy*) layaknya berbelanja di toko butik kecil yang responsif.
