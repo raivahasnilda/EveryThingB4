@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Saya | EverythingsByFour</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">EverythingsByFour.</div>
+      <div class="nav-links">
+        <a href="index.html">🛍️ Belanja</a>
+        <a href="tracking.html">🚚 Lacak Pesanan</a>
+        <a href="#" onclick="handleLogout(event)">🚪 Keluar</a>
+      </div>
+    </nav>
+
+    <div class="profile-page">
+      <div class="profile-card">
+        <div class="profile-avatar" id="profile-avatar">?</div>
+        <h2 id="profile-name" style="color:#4A4A4A; margin-bottom:4px;">-</h2>
+        <p id="profile-email" style="color:#8A8A8A; font-size:13px; margin-bottom:25px;">-</p>
+
+        <p id="profile-success" class="auth-success"></p>
+
+        <form id="profile-form" onsubmit="simpanProfil(event)">
+          <div class="auth-form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="edit-name" required />
+          </div>
+          <div class="auth-form-group">
+            <label>Nomor WhatsApp</label>
+            <input type="tel" id="edit-phone" placeholder="081234567XXX" />
+          </div>
+          <div class="auth-form-group">
+            <label>Alamat Pengiriman Utama</label>
+            <textarea id="edit-address" rows="3" placeholder="Alamat lengkap untuk memudahkan checkout berikutnya..." style="width:100%; padding:12px 16px; border:2px solid var(--pastel-blue); border-radius:14px; outline:none; font-size:14px; font-family:inherit; box-sizing:border-box;"></textarea>
+          </div>
+          <button type="submit" class="auth-submit-btn">💾 Simpan Perubahan</button>
+        </form>
+      </div>
+
+      <div class="profile-card">
+        <h3 style="color:#4A4A4A; margin-bottom:18px;">🧾 Riwayat Pesanan Saya</h3>
+        <div id="profile-orders"></div>
+      </div>
+    </div>
+
+    <script src="js/default_products.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/chatwidget.js"></script>
+    <script>
+      EB4Store.requireCustomerAuth("login.html");
+
+      const user = EB4Store.getCurrentUser();
+
+      function isiFormProfil() {
+        document.getElementById("profile-avatar").textContent = (user.name || "?").charAt(0).toUpperCase();
+        document.getElementById("profile-name").textContent = user.name || "Pelanggan";
+        document.getElementById("profile-email").textContent = user.email;
+        document.getElementById("edit-name").value = user.name || "";
+        document.getElementById("edit-phone").value = user.phone || "";
+        document.getElementById("edit-address").value = user.address || "";
+      }
+
+      function simpanProfil(e) {
+        e.preventDefault();
+        const updated = EB4Store.updateUserProfile(user.id, {
+          name: document.getElementById("edit-name").value.trim(),
+          phone: document.getElementById("edit-phone").value.trim(),
+          address: document.getElementById("edit-address").value.trim(),
+        });
+        Object.assign(user, updated);
+        isiFormProfil();
+
+        const successBox = document.getElementById("profile-success");
+        successBox.textContent = "Profil berhasil disimpan ✨";
+        successBox.style.display = "block";
+        setTimeout(() => (successBox.style.display = "none"), 2500);
+      }
+
+      const STATUS_ICON = {
+        Baru: "🆕",
+        Diproses: "⚙️",
+        Dikirim: "🚚",
+        Selesai: "✅",
+        Dibatalkan: "❌",
+      };
+
+      function renderRiwayatPesanan() {
+        const orders = EB4Store.getOrdersByUser(user.id);
+        const box = document.getElementById("profile-orders");
+
+        if (orders.length === 0) {
+          box.innerHTML = `<p style="color:#8A8A8A; font-size:13px;">Kamu belum pernah checkout menggunakan akun ini. Yuk mulai belanja! 🛍️</p>`;
+          return;
+        }
+
+        box.innerHTML = orders
+          .map(
+            (o) => `
+          <div class="profile-order-item">
+            <div>
+              <div style="font-weight:700; color:#4A4A4A;">#${o.id}</div>
+              <div style="font-size:12px; color:#8A8A8A;">${EB4Store.formatDateTime(o.createdAt)} • ${EB4Store.formatRupiah(o.totalHarga)}</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span class="profile-order-status-pill">${STATUS_ICON[o.status] || ""} ${o.status}</span>
+              <a href="tracking.html?id=${o.id}" style="text-decoration:none; background:var(--pastel-blue); color:#4a6b82; font-weight:700; font-size:12px; padding:8px 14px; border-radius:12px; white-space:nowrap;">Lacak →</a>
+            </div>
+          </div>`,
+          )
+          .join("");
+      }
+
+      function handleLogout(e) {
+        e.preventDefault();
+        if (confirm("Yakin ingin keluar dari akun ini?")) {
+          EB4Store.logoutUser();
+          window.location.href = "index.html";
+        }
+      }
+
+      isiFormProfil();
+      renderRiwayatPesanan();
+    </script>
+  </body>
+</html>

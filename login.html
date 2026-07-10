@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk Akun | EverythingsByFour</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">EverythingsByFour.</div>
+      <div class="nav-links">
+        <a href="index.html">⬅️ Kembali ke Toko</a>
+      </div>
+    </nav>
+
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <h1>Selamat Datang Kembali 🌸</h1>
+        <p class="auth-sub">Masuk untuk melacak pesanan & mempercepat checkout kamu.</p>
+
+        <p id="login-error" class="auth-error"></p>
+
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="auth-form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" required placeholder="nama@email.com" />
+          </div>
+          <div class="auth-form-group">
+            <label>Kata Sandi</label>
+            <input type="password" id="login-password" required placeholder="Kata sandi kamu" />
+          </div>
+          <button type="submit" class="auth-submit-btn">Masuk</button>
+        </form>
+
+        <span class="auth-switch-link">
+          Belum punya akun? <a href="register.html">Daftar di sini</a>
+        </span>
+      </div>
+    </div>
+
+    <script src="js/default_products.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+      // Kalau sudah login, langsung ke profil
+      if (EB4Store.getCurrentUser()) {
+        window.location.href = "profile.html";
+      }
+
+      function handleLogin(e) {
+        e.preventDefault();
+        const errorBox = document.getElementById("login-error");
+        errorBox.style.display = "none";
+
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value;
+
+        const result = EB4Store.loginUser(email, password);
+        if (!result.ok) {
+          errorBox.textContent = result.message;
+          errorBox.style.display = "block";
+          return;
+        }
+
+        window.location.href = "profile.html";
+      }
+    </script>
+  </body>
+</html>

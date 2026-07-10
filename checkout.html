@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | EverythingsByFour.</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .evb4-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999 !important;
+      }
+      .evb4-modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 380px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 2px solid #ffd6e0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="navbar"
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 5%;
+      "
+    >
+      <div
+        class="logo"
+        style="font-size: 24px; font-weight: bold; color: #db7a91"
+      >
+        EverythingsByFour.
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span id="nav-auth-area"></span>
+        <a
+          href="index.html"
+          style="
+            text-decoration: none;
+            color: white;
+            background: #db7a91;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 14px;
+          "
+          >⬅️ Kembali Belanja</a
+        >
+      </div>
+    </nav>
+
+    <main style="padding: 40px 5%; display: flex; justify-content: center">
+      <div
+        style="
+          background: white;
+          padding: 40px;
+          border-radius: 30px;
+          border: 1px solid #ffd6e0;
+          max-width: 600px;
+          width: 100%;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        "
+      >
+        <h1
+          style="
+            text-align: center;
+            color: #db7a91;
+            margin-bottom: 30px;
+            font-size: 28px;
+          "
+        >
+          Formulir Pengiriman
+        </h1>
+
+        <div
+          style="
+            background: #fff0f5;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #ffd6e0;
+            text-align: center;
+            margin-bottom: 30px;
+          "
+        >
+          <p
+            style="color: #6b6b6b; margin: 0; font-size: 15px; font-weight: 600"
+          >
+            Total Tagihan Kamu:
+          </p>
+          <h2
+            id="checkout-total"
+            style="
+              color: #db7a91;
+              font-size: 36px;
+              margin: 10px 0 0;
+              font-weight: bold;
+            "
+          >
+            Rp 0
+          </h2>
+        </div>
+
+        <form id="payForm" onsubmit="eksekusiFormCheckout(event)">
+          <div style="margin-bottom: 20px">
+            <label
+              style="
+                display: block;
+                font-weight: bold;
+                color: #4a4a4a;
+                margin-bottom: 8px;
+              "
+              >Nama Lengkap Penerima</label
+            >
+            <input
+              type="text"
+              id="customer-name"
+              placeholder="Masukkan nama kamu..."
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e8f1f5;
+                border-radius: 12px;
+                font-size: 14px;
+              "
+              required
+            />
+          </div>
+
+          <div style="margin-bottom: 20px">
+            <label
+              style="
+                display: block;
+                font-weight: bold;
+                color: #4a4a4a;
+                margin-bottom: 8px;
+              "
+              >Alamat Lengkap Pengiriman</label
+            >
+            <textarea
+              id="customer-address"
+              placeholder="Nama jalan, nomor rumah, RT/RW, kecamatan, kota..."
+              rows="3"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e8f1f5;
+                border-radius: 12px;
+                font-size: 14px;
+                font-family: inherit;
+              "
+              required
+            ></textarea>
+          </div>
+
+          <div style="margin-bottom: 20px">
+            <label
+              style="
+                display: block;
+                font-weight: bold;
+                color: #4a4a4a;
+                margin-bottom: 8px;
+              "
+              >Nomor WhatsApp Aktif</label
+            >
+            <input
+              type="tel"
+              id="customer-phone"
+              placeholder="Contoh: 081234567XXX"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e8f1f5;
+                border-radius: 12px;
+                font-size: 14px;
+              "
+              required
+            />
+          </div>
+
+          <div style="margin-bottom: 30px">
+            <label
+              style="
+                display: block;
+                font-weight: bold;
+                color: #4a4a4a;
+                margin-bottom: 8px;
+              "
+              >Metode Pembayaran</label
+            >
+            <select
+              id="metode-bayar"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e8f1f5;
+                border-radius: 12px;
+                font-size: 14px;
+                background: white;
+              "
+              required
+            >
+              <option value="">-- Pilih Metode Pembayaran --</option>
+              <option value="qris">
+                E-Wallet / QRIS Otomatis (Rekomendasi)
+              </option>
+              <option value="transfer">Transfer Bank Virtual Account</option>
+              <option value="cod">COD (Bayar di Tempat Ekspedisi)</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            style="
+              width: 100%;
+              padding: 15px;
+              background: #db7a91;
+              color: white;
+              border: none;
+              border-radius: 15px;
+              font-size: 16px;
+              font-weight: bold;
+              cursor: pointer;
+              box-shadow: 0 4px 15px rgba(219, 122, 145, 0.3);
+            "
+          >
+            Konfirmasi Pesanan ✨
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <div id="evb4-modal-overlay" class="evb4-modal-overlay">
+      <div class="evb4-modal-content">
+        <div id="evb4-dynamic-content"></div>
+      </div>
+    </div>
+
+    <!-- Urutan penting: seed produk -> store (backend palsu) -> chat widget -->
+    <script src="js/default_products.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/authnav.js"></script>
+    <script src="js/chatwidget.js"></script>
+
+    <script>
+      window.totalFinalFix = 0;
+
+      function hitungUlangTotalCheckout() {
+        const dataKeranjang = JSON.parse(localStorage.getItem("eb4_cart")) || [];
+        const totalBackupHalamanUtama =
+          parseInt(localStorage.getItem("eb4_total_sementara")) || 0;
+
+        let hitungTotal = dataKeranjang.reduce(
+          (sum, item) => sum + (item.price || 0) * item.quantity,
+          0,
+        );
+
+        if (hitungTotal === 0) hitungTotal = totalBackupHalamanUtama;
+
+        window.totalFinalFix = hitungTotal;
+
+        const boxTotal = document.getElementById("checkout-total");
+        if (boxTotal) {
+          boxTotal.innerText = EB4Store.formatRupiah(window.totalFinalFix);
+        }
+      }
+
+      hitungUlangTotalCheckout();
+
+      // Kalau pelanggan sudah login, isi otomatis nama/telepon/alamat dari profil
+      (function prefillDariProfil() {
+        const user = EB4Store.getCurrentUser();
+        if (!user) return;
+        if (user.name) document.getElementById("customer-name").value = user.name;
+        if (user.phone) document.getElementById("customer-phone").value = user.phone;
+        if (user.address) document.getElementById("customer-address").value = user.address;
+      })();
+
+      function eksekusiFormCheckout(e) {
+        e.preventDefault();
+
+        const keranjangBelanja = JSON.parse(localStorage.getItem("eb4_cart")) || [];
+        if (keranjangBelanja.length === 0) {
+          alert("Keranjang belanja Anda masih kosong! Silakan pilih pakaian terlebih dahulu.");
+          return;
+        }
+
+        const metodePilihan = document.getElementById("metode-bayar").value;
+        if (!metodePilihan) {
+          alert("Silakan pilih metode pembayaran terlebih dahulu!");
+          return;
+        }
+
+        const totalNota = window.totalFinalFix || 0;
+        const namaPenerima = document.getElementById("customer-name").value || "Pelanggan Tanpa Nama";
+        const alamatLengkap = document.getElementById("customer-address").value || "-";
+        const nomorTelepon = document.getElementById("customer-phone").value || "-";
+
+        const currentUser = EB4Store.getCurrentUser();
+
+        // Simpan pesanan lewat EB4Store -> otomatis muncul & memicu notifikasi
+        // di Admin/admin_pesanan.html serta Admin/admin_dashboard.html.
+        // userId ditempel supaya pesanan ini muncul di profile.html &
+        // tracking.html milik pelanggan yang sedang login (kalau ada).
+        const pesananBaru = EB4Store.addOrder({
+          nama: namaPenerima,
+          telepon: nomorTelepon,
+          alamat: alamatLengkap,
+          metode: metodePilihan,
+          totalHarga: totalNota,
+          items: keranjangBelanja,
+          userId: currentUser ? currentUser.id : null,
+        });
+
+        // Kosongkan keranjang customer karena sudah dipesan
+        localStorage.removeItem("eb4_cart");
+        localStorage.removeItem("eb4_total_sementara");
+
+        const overlayPopup = document.getElementById("evb4-modal-overlay");
+        const boxKontenDinamis = document.getElementById("evb4-dynamic-content");
+        const teksHargaFinal = EB4Store.formatRupiah(totalNota);
+
+        if (metodePilihan === "qris") {
+          boxKontenDinamis.innerHTML = `
+              <h3 style="color:#DB7A91; margin-top:0; margin-bottom:10px;">Payment Gateway: QRIS</h3>
+              <p style="font-size:13px; color:#6B6B6B; margin-bottom:15px;">Silakan scan kode QRIS resmi toko di bawah ini:</p>
+              <img src="images/qris-code.jpeg" alt="QRIS EverythingsByFour" style="margin-bottom:15px; width:180px; height:180px; object-fit:contain;">
+              <p style="font-weight:bold; font-size:20px; color:#4A4A4A; margin-bottom:6px;">Total: ${teksHargaFinal}</p>
+              <p style="font-size:12px; color:#8A8A8A; margin-bottom:20px;">No. Pesanan: ${pesananBaru.id} — <a href="tracking.html?id=${pesananBaru.id}" style="color:#DB7A91; font-weight:bold;">Lacak pesanan ini</a></p>
+              <button onclick="window.location.href='order_success.html'" style="padding:12px 25px; background:#db7a91; color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer; width:100%;">Saya Sudah Bayar ✨</button>
+          `;
+        } else {
+          boxKontenDinamis.innerHTML = `
+              <h3 style="color:#DB7A91; margin-top:0; margin-bottom:10px;">Pesanan Berhasil Dibuat!</h3>
+              <p style="font-size:13px; color:#6B6B6B; margin-bottom:15px;">Metode Pembayaran: <strong>${metodePilihan.toUpperCase()}</strong></p>
+              <p style="font-weight:bold; font-size:20px; color:#4A4A4A; margin-bottom:6px;">Total Tagihan: ${teksHargaFinal}</p>
+              <p style="font-size:12px; color:#8A8A8A; margin-bottom:20px;">No. Pesanan: ${pesananBaru.id} — <a href="tracking.html?id=${pesananBaru.id}" style="color:#DB7A91; font-weight:bold;">Lacak pesanan ini</a></p>
+              <button onclick="window.location.href='order_success.html'" style="padding:12px 25px; background:#db7a91; color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer; width:100%;">Lanjutkan ✨</button>
+          `;
+        }
+
+        overlayPopup.style.display = "flex";
+      }
+    </script>
+  </body>
+</html>

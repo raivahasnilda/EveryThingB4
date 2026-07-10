@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Admin EverythingsByFour</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div class="admin-layout">
+      <aside id="admin-sidebar"></aside>
+
+      <div class="admin-main">
+        <header id="admin-topbar"></header>
+
+        <div class="admin-content">
+          <div class="admin-stats-grid">
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon" style="background:#fff0f5; color:#db7a91;">🧾</div>
+              <div>
+                <div id="stat-total-orders" class="admin-stat-value">0</div>
+                <div class="admin-stat-label">Total Pesanan</div>
+              </div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon" style="background:#fff0f0; color:#ff4d67;">🔔</div>
+              <div>
+                <div id="stat-new-orders" class="admin-stat-value">0</div>
+                <div class="admin-stat-label">Pesanan Belum Dibaca</div>
+              </div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon" style="background:#e8f1f5; color:#4a6b82;">💰</div>
+              <div>
+                <div id="stat-revenue" class="admin-stat-value">Rp 0</div>
+                <div class="admin-stat-label">Total Omzet (semua status)</div>
+              </div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon" style="background:#fff8e8; color:#c99a2e;">👗</div>
+              <div>
+                <div id="stat-products" class="admin-stat-value">0</div>
+                <div class="admin-stat-label">Produk Aktif</div>
+              </div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon" style="background:#f0e8ff; color:#8a5fd1;">💬</div>
+              <div>
+                <div id="stat-chats" class="admin-stat-value">0</div>
+                <div class="admin-stat-label">Chat Belum Dibalas</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-title">
+              <span>🧾 Pesanan Terbaru</span>
+              <a href="admin_pesanan.html" class="admin-btn admin-btn-secondary admin-btn-sm">Lihat Semua</a>
+            </div>
+            <div id="dashboard-recent-orders"></div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-title">
+              <span>💬 Live Chat Terbaru</span>
+              <a href="admin_livechat.html" class="admin-btn admin-btn-secondary admin-btn-sm">Buka Live Chat</a>
+            </div>
+            <div id="dashboard-recent-chats"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/default_products.js"></script>
+    <script src="../js/store.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+      AdminUI.init({ page: "dashboard", title: "Dashboard" });
+
+      function renderDashboard() {
+        const orders = EB4Store.getOrders();
+        const chats = EB4Store.getConversations();
+        const products = EB4Store.getProducts();
+
+        document.getElementById("stat-total-orders").textContent = orders.length;
+        document.getElementById("stat-new-orders").textContent = orders.filter((o) => o.unread).length;
+        document.getElementById("stat-revenue").textContent = EB4Store.formatRupiah(
+          orders.reduce((sum, o) => sum + (o.totalHarga || 0), 0),
+        );
+        document.getElementById("stat-products").textContent = products.length;
+        document.getElementById("stat-chats").textContent = chats.filter((c) => c.unreadForAdmin).length;
+
+        const recentOrdersBox = document.getElementById("dashboard-recent-orders");
+        const recentOrders = orders.slice(0, 5);
+        if (recentOrders.length === 0) {
+          recentOrdersBox.innerHTML = `<div class="admin-empty-state">Belum ada pesanan masuk.</div>`;
+        } else {
+          recentOrdersBox.innerHTML = recentOrders
+            .map(
+              (o) => `
+            <div class="order-card ${o.unread ? "is-unread" : ""}" style="margin-bottom:10px;">
+              <div class="order-card-head">
+                <div>
+                  <div class="order-id">${o.id} ${o.unread ? '<span class="order-badge-new">Baru</span>' : ""}</div>
+                  <div class="order-customer">${o.nama}</div>
+                  <div class="order-meta">${EB4Store.formatDateTime(o.createdAt)} <span style="color:#b0b0b0;">(${EB4Store.timeAgo(o.createdAt)})</span> • ${o.metode ? o.metode.toUpperCase() : "-"}</div>
+                </div>
+                <div class="order-total-row">${EB4Store.formatRupiah(o.totalHarga)}</div>
+              </div>
+            </div>`,
+            )
+            .join("");
+        }
+
+        const recentChatsBox = document.getElementById("dashboard-recent-chats");
+        const recentChats = chats.slice(0, 5);
+        if (recentChats.length === 0) {
+          recentChatsBox.innerHTML = `<div class="admin-empty-state">Belum ada pelanggan yang chat.</div>`;
+        } else {
+          recentChatsBox.innerHTML = recentChats
+            .map((c) => {
+              const last = c.messages[c.messages.length - 1];
+              return `
+              <a href="admin_livechat.html" class="chat-contact" style="border-radius:14px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div class="chat-contact-avatar">${(c.customerName || "?").charAt(0).toUpperCase()}</div>
+                <div style="flex:1; min-width:0;">
+                  <div class="chat-contact-name">${c.customerName}</div>
+                  <div class="chat-contact-last">${last ? last.text : ""}</div>
+                </div>
+                ${c.unreadForAdmin ? '<span class="chat-contact-unread-dot" style="position:static;"></span>' : ""}
+              </a>`;
+            })
+            .join("");
+        }
+      }
+
+      renderDashboard();
+      window.onAdminDataChange = renderDashboard;
+      setInterval(renderDashboard, 4000);
+    </script>
+  </body>
+</html>

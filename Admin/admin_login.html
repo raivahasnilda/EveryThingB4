@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Internal Gate — EverythingsByFour Management</title>
+    <style>
+      body {
+        font-family: "Poppins", "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #fff0f5 0%, #e8f1f5 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .login-card {
+        background: #ffffff;
+        padding: 45px 40px;
+        border-radius: 24px;
+        border: 1px solid #ffd6e0;
+        box-shadow: 0 12px 35px rgba(219, 122, 145, 0.08);
+        text-align: center;
+        width: 340px;
+      }
+      .brand-name {
+        font-size: 26px;
+        font-weight: 800;
+        color: #db7a91;
+        margin-bottom: 5px;
+        letter-spacing: 0.5px;
+      }
+      .system-title {
+        font-size: 13px;
+        color: #8a8a8a;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 30px;
+        font-weight: 600;
+      }
+      .input-group {
+        margin-bottom: 18px;
+        text-align: left;
+      }
+      .input-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #6b6b6b;
+        margin-bottom: 6px;
+      }
+      input {
+        width: 100%;
+        padding: 13px 16px;
+        border: 2px solid #e8f1f5;
+        border-radius: 14px;
+        box-sizing: border-box;
+        outline: none;
+        font-size: 14px;
+        color: #4a4a4a;
+        transition: all 0.3s ease;
+      }
+      input:focus {
+        border-color: #db7a91;
+        background-color: #fffbfa;
+        box-shadow: 0 4px 12px rgba(219, 122, 145, 0.05);
+      }
+      button {
+        width: 100%;
+        padding: 14px;
+        background: #db7a91;
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(219, 122, 145, 0.2);
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+      button:hover {
+        background: #c3657b;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(219, 122, 145, 0.25);
+      }
+      .error-msg {
+        color: #d94b4b;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: -8px;
+        margin-bottom: 12px;
+        display: none;
+      }
+      .back-link {
+        display: block;
+        margin-top: 18px;
+        font-size: 12px;
+        color: #8a8a8a;
+        text-decoration: none;
+      }
+      .back-link:hover {
+        color: #db7a91;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card">
+      <div class="brand-name">EverythingsByFour.</div>
+      <div class="system-title">Enterprise Commerce System</div>
+
+      <form id="login-form" onsubmit="handleInternalLogin(event)">
+        <div class="input-group">
+          <label>Security ID / Username</label>
+          <input
+            type="text"
+            id="admin-user"
+            placeholder="Masukkan ID Staf Terdaftar"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label>Access Password</label>
+          <input
+            type="password"
+            id="admin-pass"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+        <p id="login-error" class="error-msg">Akses ditolak! ID atau password salah.</p>
+        <button type="submit">Autentikasi Akses ✨</button>
+      </form>
+      <a href="../index.html" class="back-link">⬅️ Kembali ke Toko</a>
+    </div>
+
+    <script src="../js/store.js"></script>
+    <script>
+      // Kalau sudah login sebelumnya (misal buka tab baru), langsung ke dashboard
+      if (EB4Store.isLoggedIn()) {
+        window.location.href = "admin_dashboard.html";
+      }
+
+      function handleInternalLogin(e) {
+        e.preventDefault();
+        const user = document.getElementById("admin-user").value.trim();
+        const pass = document.getElementById("admin-pass").value;
+        const errorMsg = document.getElementById("login-error");
+
+        if (EB4Store.login(user, pass)) {
+          window.location.href = "admin_dashboard.html";
+        } else {
+          errorMsg.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>

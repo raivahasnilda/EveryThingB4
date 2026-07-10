@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesanan Berhasil | EverythingsByFour</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #fffbfa;
+        color: #4a4a4a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .success-card {
+        background: white;
+        padding: 45px 40px;
+        border-radius: 24px;
+        border: 1px solid #ffd6e0;
+        box-shadow: 0 10px 30px rgba(219, 122, 145, 0.05);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+      .icon-success {
+        font-size: 60px;
+        margin-bottom: 20px;
+        display: inline-block;
+        animation: bounce 1s infinite alternate;
+      }
+      @keyframes bounce {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-10px);
+        }
+      }
+      h2 {
+        color: #db7a91;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      p {
+        color: #6b6b6b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+      .btn-home {
+        display: block;
+        padding: 14px;
+        background-color: #db7a91;
+        color: white;
+        text-decoration: none;
+        border-radius: 14px;
+        font-weight: bold;
+        font-size: 15px;
+        box-shadow: 0 4px 12px rgba(219, 122, 145, 0.2);
+        transition: 0.3s;
+      }
+      .btn-home:hover {
+        background-color: #c3657b;
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="success-card">
+      <div class="icon-success">✨🛍️✨</div>
+      <h2>Pesanan Anda Berhasil!</h2>
+      <p>
+        Terima kasih telah berbelanja di EverythingsByFour. Tim operasional kami
+        sedang menyiapkan pakaian terbaik untuk segera dikirimkan ke alamat
+        Anda. Silakan periksa WhatsApp Anda secara berkala.
+      </p>
+      <a href="index.html" class="btn-home">Kembali Berbelanja 🌸</a>
+    </div>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/default_products.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/chatwidget.js"></script>
+  </body>
+</html>

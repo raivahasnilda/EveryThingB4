@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EverythingsByFour | Toko Fashion Trendy</title>
+    <!-- Menghubungkan ke file CSS pastel -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- NAVBAR / MENU ATAS -->
+    <nav class="navbar">
+      <div class="logo">EverythingsByFour.</div>
+      <div class="search-bar">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Cari pakaian favoritmu..."
+          onkeyup="searchProduct()"
+        />
+      </div>
+      <div class="nav-links">
+        <a href="#katalog">Katalog</a>
+        <a href="#tentang-kami">Tentang Kami</a>
+        <a href="#ulasan">Ulasan</a>
+        <a href="#kontak">Kontak</a>
+        <a href="tracking.html">🚚 Lacak Pesanan</a>
+        <span id="nav-auth-area"></span>
+        <div class="cart-icon" onclick="toggleCart()">
+          🛒 <span id="cart-count">0</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO BANNER / TAMPILAN UTAMA -->
+    <header class="hero">
+      <div class="hero-content">
+        <h1>Find Your Perfect Outfit</h1>
+        <p>
+          From casual essentials to trendy collections, EverythingsByFour has
+          everything you need.
+        </p>
+        <div id="store-rating-badge" class="store-rating-badge"></div>
+        <a href="#katalog" class="btn-hero">Lihat Koleksi</a>
+      </div>
+    </header>
+
+    <!-- SECTION BEST SELLER -->
+    <section id="bestseller-section" style="padding: 50px 5% 10px;">
+      <h2 class="section-title">🔥 Produk Best Seller</h2>
+      <p style="text-align: center; color: #6b6b6b; margin-bottom: 30px; font-size: 15px;">
+        Paling banyak dicari & dibeli pelanggan EverythingsByFour bulan ini.
+      </p>
+      <div class="product-grid" id="bestseller-grid">
+        <!-- Diisi otomatis oleh JavaScript -->
+      </div>
+    </section>
+
+    <!-- KONTEN UTAMA: FILTERS & KATALOG -->
+    <main>
+      <section id="katalog" class="catalog-section">
+        <h2 class="section-title">Koleksi Pakaian</h2>
+
+        <!-- Filter Berdasarkan Kategori Baju -->
+        <div class="filters">
+          <button
+            class="btn-filter active"
+            onclick="filterCategory('all', this)"
+          >
+            Semua
+          </button>
+          <button class="btn-filter btn-filter-bestseller" onclick="filterBestseller(this)">
+            🔥 Best Seller
+          </button>
+          <button class="btn-filter" onclick="filterCategory('Atasan', this)">
+            Atasan
+          </button>
+          <button class="btn-filter" onclick="filterCategory('Bawahan', this)">
+            Bawahan
+          </button>
+          <button class="btn-filter" onclick="filterCategory('Dress', this)">
+            Dress
+          </button>
+        </div>
+
+        <!-- Grid Tempat Baju-Baju Anda Muncul -->
+        <div class="product-grid" id="product-grid">
+          <!-- Produk otomatis diisi oleh JavaScript -->
+        </div>
+      </section>
+
+      <!-- SIDEBAR KERANJANG (Tersembunyi di samping kanan) -->
+      <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+          <h3>Keranjang Belanja</h3>
+          <button class="close-cart" onclick="toggleCart()">✕</button>
+        </div>
+        <div id="cart-items" class="cart-items">
+          <!-- Daftar belanjaan muncul di sini -->
+        </div>
+        <div class="cart-footer">
+          <div class="total-box">
+            <span>Total:</span>
+            <span id="cart-total-price">Rp 0</span>
+          </div>
+          <a
+            href="checkout.html"
+            class="btn-checkout"
+            style="text-decoration: none; display: block; text-align: center"
+            >Lanjut ke Pembayaran</a
+          >
+        </div>
+      </div>
+
+      <!-- SECTION TENTANG KAMI -->
+      <section
+        id="tentang-kami"
+        style="
+          padding: 60px 5%;
+          background-color: #fff0f5;
+          margin-top: 40px;
+          border-radius: 30px;
+          text-align: center;
+        "
+      >
+        <h2 class="section-title">Tentang EverythingsByFour</h2>
+        <p
+          style="
+            max-width: 700px;
+            margin: 20px auto 0;
+            line-height: 1.8;
+            color: #6b6b6b;
+            font-size: 16px;
+          "
+        >
+          Welcome to <strong>EverythingsByFour</strong>! 🤍 Di
+          EverythingsByFour, kami percaya bahwa setiap orang memiliki gaya yang
+          unik dan layak tampil percaya diri dalam setiap kesempatan. Karena
+          itu, kami menghadirkan koleksi fashion pilihan yang menggabungkan
+          kenyamanan, kualitas, dan sentuhan tren terkini agar kamu bisa tampil
+          stylish tanpa perlu mengorbankan rasa nyaman. Mulai dari outfit kasual
+          untuk aktivitas sehari-hari hingga pilihan fashion yang cocok untuk
+          momen spesial, setiap koleksi kami dipilih dengan penuh perhatian agar
+          mudah dipadukan dengan gaya favoritmu. Kami ingin menjadi bagian dari
+          perjalananmu dalam menemukan outfit yang bukan hanya terlihat menarik,
+          tetapi juga membuatmu merasa lebih percaya diri setiap kali
+          memakainya. Terima kasih telah memilih EverythingsByFour. Semoga
+          setiap koleksi yang kamu temukan di sini bisa menjadi bagian dari
+          cerita dan gaya terbaikmu. ✨
+        </p>
+      </section>
+
+      <!-- SECTION ULASAN PELANGGAN -->
+      <section id="ulasan" style="padding: 60px 5%; text-align: center;">
+        <h2 class="section-title">Apa Kata Pelanggan Kami</h2>
+        <div id="ulasan-rating-summary" class="ulasan-rating-summary"></div>
+        <p style="color: #6b6b6b; margin-bottom: 35px; font-size: 15px;">
+          Ribuan pelanggan sudah merasakan kenyamanan berbelanja di
+          EverythingsByFour. Ini beberapa cerita mereka ✨
+        </p>
+
+        <div class="testimonial-grid">
+          <div class="testimonial-card" data-rating="5">
+            <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+              "Bahan cardigan-nya lembut banget dan warnanya persis seperti di
+              foto! Pengiriman juga cepat, admin-nya ramah kalau ditanya-tanya
+              lewat live chat."
+            </p>
+            <div class="testimonial-footer">
+              <div class="testimonial-avatar">S</div>
+              <div>
+                <div class="testimonial-name">Sista R.</div>
+                <div class="testimonial-role">Pelanggan Setia — Lembang</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" data-rating="5">
+            <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+              "Suka banget sama konsep pastelnya, bikin betah lihat-lihat
+              katalognya. Ukurannya pas dan harganya juga ramah di kantong
+              mahasiswa kayak aku."
+            </p>
+            <div class="testimonial-footer">
+              <div class="testimonial-avatar">D</div>
+              <div>
+                <div class="testimonial-name">Dhea A.</div>
+                <div class="testimonial-role">Mahasiswi — Bandung</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" data-rating="5">
+            <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+              "Sudah beberapa kali order dan selalu puas. Fitur lacak
+              pesanannya juga membantu banget jadi nggak perlu tanya-tanya
+              admin terus soal status paket."
+            </p>
+            <div class="testimonial-footer">
+              <div class="testimonial-avatar">N</div>
+              <div>
+                <div class="testimonial-name">Nadya P.</div>
+                <div class="testimonial-role">Pelanggan Setia — Bandung Barat</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" data-rating="4">
+            <div class="testimonial-stars">⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+              "Dress Red Velvet-nya jadi favorit buat acara keluarga. Bahannya
+              adem walaupun dipakai seharian. Pasti balik lagi buat koleksi
+              lainnya!"
+            </p>
+            <div class="testimonial-footer">
+              <div class="testimonial-avatar">R</div>
+              <div>
+                <div class="testimonial-name">Rani K.</div>
+                <div class="testimonial-role">Pelanggan Baru — Jakarta</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION KONTAK SOSIAL MEDIA ASLI -->
+      <section
+        id="kontak"
+        style="padding: 60px 5%; text-align: center; margin-top: 20px"
+      >
+        <h2 class="section-title">Hubungi Kami</h2>
+        <p style="color: #6b6b6b; margin-bottom: 25px; font-size: 15px">
+          Punya pertanyaan seputar koleksi pakaian EverythingsByFour? Sapa kami
+          di sosmed ya, atau klik ikon 💬 di pojok kanan bawah untuk chat
+          langsung dengan admin kami!
+        </p>
+
+        <!-- INFORMASI TOKO: ALAMAT, EMAIL, JAM OPERASIONAL -->
+        <div class="store-info-grid">
+          <div class="store-info-card">
+            <div class="store-info-icon">📍</div>
+            <div class="store-info-label">Alamat Toko</div>
+            <div class="store-info-value">
+              Jl. Sindangwangi 01/09, Lembang,<br />Bandung Barat, Jawa Barat
+            </div>
+          </div>
+          <div class="store-info-card">
+            <div class="store-info-icon">✉️</div>
+            <div class="store-info-label">Email Kontak</div>
+            <div class="store-info-value">
+              <a href="mailto:everythingsby4@gmail.com">everythingsby4@gmail.com</a>
+            </div>
+          </div>
+          <div class="store-info-card">
+            <div class="store-info-icon">🕒</div>
+            <div class="store-info-label">Jam Operasional</div>
+            <div class="store-info-value">Setiap Hari<br />09.00 – 21.00 WIB</div>
+          </div>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+          "
+        >
+          <!-- Tombol Instagram Asli -->
+          <a
+            href="https://www.instagram.com/prel.ovednjastipbyfour?igsh=MnBxcHk5ZmZza2wy&utm_source=qr"
+            target="_blank"
+            style="
+              text-decoration: none;
+              color: #4a4a4a;
+              font-weight: 600;
+              padding: 12px 25px;
+              background: white;
+              border: 2px solid #e8f1f5;
+              border-radius: 20px;
+              transition: 0.3s;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            "
+            >📸 Instagram @prel.ovednjastipbyfour</a
+          >
+
+          <!-- Tombol TikTok Asli -->
+          <a
+            href="https://tiktok.com"
+            target="_blank"
+            style="
+              text-decoration: none;
+              color: #4a4a4a;
+              font-weight: 600;
+              padding: 12px 25px;
+              background: white;
+              border: 2px solid #e8f1f5;
+              border-radius: 20px;
+              transition: 0.3s;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            "
+            >🎵 TikTok @everthingsbyfour</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <!-- =========================================================================
+       MODAL DETAIL PRODUK (POP-UP MELAYANG)
+       ========================================================================= -->
+    <div id="product-modal" class="modal-overlay" onclick="closeProductModal(event)">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeProductModalDirect()">✕</button>
+
+        <div class="modal-body-layout">
+          <div class="modal-img-box">
+            <img id="modal-product-img" src="" alt="Foto Produk" />
+          </div>
+
+          <div class="modal-info-box">
+            <h2 id="modal-product-name" style="color: #db7a91; margin-bottom: 10px;">Nama Produk</h2>
+            <p id="modal-product-price" style="font-size: 20px; font-weight: bold; color: #4a4a4a; margin-bottom: 15px;">Rp 0</p>
+
+            <div style="margin-bottom: 15px; background: #fff0f5; padding: 15px; border-radius: 12px; border: 1px solid #ffd6e0;">
+              <h4 style="margin-bottom: 5px; font-size: 14px;">✨ Detail & Spesifikasi Produk:</h4>
+              <p style="font-size: 13px; color: #6b6b6b; line-height: 1.6;">
+                Bahan premium berkualitas tinggi yang sangat lembut, adem, dan nyaman digunakan seharian. Jahitan super rapi standar butik, sangat cocok untuk melengkapi OOTD kasual maupun formal kamu! ✨
+              </p>
+            </div>
+            <div id="modal-btn-placeholder" style="margin-top: auto;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+       FOOTER LENGKAP (Persyaratan Wajib Proyek)
+       ========================================================================= -->
+    <footer>
+      <div class="footer-container">
+        <!-- Kolom 1: Profil & Sosmed -->
+        <div class="footer-column">
+          <h3 class="footer-title">EverythingsByFour.</h3>
+          <p style="font-size: 13px; line-height: 1.6; margin-bottom: 15px">
+            Destinasi fashion pastel modern terlengkap untuk lengkapi OOTD
+            estetik harianmu. Belanja aman, mudah, dan terpercaya. ✨
+          </p>
+          <div class="footer-sosmed-links">
+            <a href="https://instagram.com" target="_blank">📸 Instagram</a>
+            <a href="https://tiktok.com" target="_blank">🎵 TikTok</a>
+          </div>
+        </div>
+
+        <!-- Kolom 2: Layanan Pelanggan -->
+        <div class="footer-column">
+          <h4 class="footer-sub-title">Layanan Pelanggan</h4>
+          <ul>
+            <li><a href="#katalog">Cara Berbelanja</a></li>
+            <li><a href="#kontak">Bantuan & Dukungan</a></li>
+            <li><a href="checkout.html">Lacak Pesanan Saya</a></li>
+            <li><a href="#kontak">Tanya Jawab (FAQ)</a></li>
+            <li><a href="#kontak">Pengembalian & Dana</a></li>
+          </ul>
+        </div>
+
+        <!-- Kolom 3: Tentang Kebijakan Perusahaan -->
+        <div class="footer-column">
+          <h4 class="footer-sub-title">Tentang Kami</h4>
+          <ul>
+            <li><a href="#tentang-kami">Tentang EverythingsByFour</a></li>
+            <li><a href="#tentang-kami">Keberlanjutan (Sustainability)</a></li>
+            <li><a href="#kontak">Lokasi Toko</a></li>
+            <li><a href="#tentang-kami">Syarat & Ketentuan</a></li>
+            <li><a href="#tentang-kami">Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+
+        <!-- Kolom 4: Kontak & Jam Operasional Toko -->
+        <div class="footer-column">
+          <h4 class="footer-sub-title">Kontak Toko</h4>
+          <p style="font-size: 13px; line-height: 1.8; color: #6b6b6b;">
+            📍 Jl. Sindangwangi 01/09, Lembang,<br />Bandung Barat, Jawa Barat<br /><br />
+            ✉️ <a href="mailto:everythingsby4@gmail.com" style="color:#6b6b6b; text-decoration:none;">everythingsby4@gmail.com</a><br /><br />
+            🕒 Setiap Hari, 09.00 – 21.00 WIB
+          </p>
+        </div>
+      </div>
+
+      <!-- Garis Penutup Hak Cipta & Pintu Masuk Admin -->
+      <div class="footer-bottom">
+        <p>&copy; 2026 EverythingsByFour. All Rights Reserved.</p>
+        <p style="margin-top: 8px">
+          <a
+            href="Admin/admin_login.html"
+            style="color: #db7a91; text-decoration: none; font-weight: bold; font-size: 12px;"
+            >🔒 Panel Admin Toko</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <!-- INTEGRASI GOOGLE ANALYTICS (DUMMY SCRIPT - Syarat Analisis Web dari Dosen) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      console.log("Google Analytics Dummy Aktif: Memantau Bounce Rate dan Konversi Penjualan.");
+    </script>
+
+    <!-- Urutan penting: seed produk -> store (backend palsu) -> app (UI) -> chat widget -->
+    <script src="js/default_products.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/authnav.js"></script>
+    <script src="js/chatwidget.js"></script>
+  </body>
+</html>

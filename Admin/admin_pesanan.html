@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesanan | Admin EverythingsByFour</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div class="admin-layout">
+      <aside id="admin-sidebar"></aside>
+
+      <div class="admin-main">
+        <header id="admin-topbar"></header>
+
+        <div class="admin-content">
+          <div class="admin-panel">
+            <div class="admin-panel-title">
+              <span>🧾 Semua Pesanan Masuk</span>
+              <button class="admin-btn admin-btn-secondary admin-btn-sm" onclick="EB4Store.markAllOrdersRead(); renderPesanan(); AdminUI.refreshBadges();">
+                ✓ Tandai Semua Dibaca
+              </button>
+            </div>
+
+            <div class="filters" style="justify-content:flex-start; margin-bottom:20px;">
+              <button class="btn-filter active" onclick="filterStatus('semua', this)">Semua</button>
+              <button class="btn-filter" onclick="filterStatus('Baru', this)">Baru</button>
+              <button class="btn-filter" onclick="filterStatus('Diproses', this)">Diproses</button>
+              <button class="btn-filter" onclick="filterStatus('Dikirim', this)">Dikirim</button>
+              <button class="btn-filter" onclick="filterStatus('Selesai', this)">Selesai</button>
+              <button class="btn-filter" onclick="filterStatus('Dibatalkan', this)">Dibatalkan</button>
+            </div>
+
+            <div id="orders-list"></div>
+            <div id="orders-empty" class="admin-empty-state" style="display:none;">
+              Belum ada pesanan pada kategori ini.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/default_products.js"></script>
+    <script src="../js/store.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+      AdminUI.init({ page: "pesanan", title: "Pesanan" });
+
+      let currentFilter = "semua";
+
+      function filterStatus(status, btn) {
+        currentFilter = status;
+        document.querySelectorAll(".btn-filter").forEach((b) => b.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        renderPesanan();
+      }
+
+      const METODE_LABEL = {
+        qris: "E-Wallet / QRIS",
+        transfer: "Transfer Bank",
+        cod: "COD (Bayar di Tempat)",
+      };
+
+      function renderPesanan() {
+        let orders = EB4Store.getOrders();
+        if (currentFilter !== "semua") {
+          orders = orders.filter((o) => o.status === currentFilter);
+        }
+
+        const list = document.getElementById("orders-list");
+        const empty = document.getElementById("orders-empty");
+
+        if (orders.length === 0) {
+          list.innerHTML = "";
+          empty.style.display = "block";
+          return;
+        }
+        empty.style.display = "none";
+
+        list.innerHTML = orders
+          .map((o) => {
+            const itemsHtml = (o.items || [])
+              .map(
+                (it) => `
+              <div>
+                <span>${it.name} <strong>x${it.quantity}</strong></span>
+                <span>${EB4Store.formatRupiah(it.price * it.quantity)}</span>
+              </div>`,
+              )
+              .join("");
+
+            return `
+            <div class="order-card ${o.unread ? "is-unread" : ""}" id="order-${o.id}">
+              <div class="order-card-head">
+                <div>
+                  <div class="order-id">
+                    #${o.id} ${o.unread ? '<span class="order-badge-new">Baru</span>' : ""}
+                  </div>
+                  <div class="order-customer">👤 ${o.nama}</div>
+                  <div class="order-meta">
+                    📱 ${o.telepon} • 🕒 ${EB4Store.formatDateTime(o.createdAt)} <span style="color:#b0b0b0;">(${EB4Store.timeAgo(o.createdAt)})</span><br>
+                    📍 ${o.alamat}<br>
+                    💳 ${METODE_LABEL[o.metode] || o.metode}
+                  </div>
+                </div>
+                <select class="order-status-select" onchange="ubahStatus('${o.id}', this.value)">
+                  ${EB4Store.ORDER_STATUSES.map(
+                    (s) => `<option value="${s}" ${s === o.status ? "selected" : ""}>${s}</option>`,
+                  ).join("")}
+                </select>
+              </div>
+
+              <div class="order-items-list">
+                ${itemsHtml || "<div>Tidak ada rincian barang.</div>"}
+              </div>
+
+              <div class="order-total-row">
+                <span>Total Tagihan</span>
+                <span>${EB4Store.formatRupiah(o.totalHarga)}</span>
+              </div>
+
+              <div style="margin-top:14px; display:flex; gap:10px;">
+                ${o.unread ? `<button class="admin-btn admin-btn-secondary admin-btn-sm" onclick="EB4Store.markOrderRead('${o.id}'); renderPesanan(); AdminUI.refreshBadges();">✓ Tandai Dibaca</button>` : ""}
+                <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="hapusPesanan('${o.id}')">🗑️ Hapus</button>
+              </div>
+            </div>`;
+          })
+          .join("");
+      }
+
+      function ubahStatus(id, status) {
+        EB4Store.updateOrderStatus(id, status);
+        if (currentFilter !== "semua") renderPesanan();
+      }
+
+      function hapusPesanan(id) {
+        if (confirm("Hapus pesanan ini dari daftar? Tindakan ini tidak bisa dibatalkan.")) {
+          EB4Store.deleteOrder(id);
+          renderPesanan();
+        }
+      }
+
+      renderPesanan();
+      window.onAdminDataChange = renderPesanan;
+    </script>
+  </body>
+</html>

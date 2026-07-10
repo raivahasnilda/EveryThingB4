@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produk | Admin EverythingsByFour</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div class="admin-layout">
+      <aside id="admin-sidebar"></aside>
+
+      <div class="admin-main">
+        <header id="admin-topbar"></header>
+
+        <div class="admin-content">
+          <div class="admin-panel">
+            <div class="admin-panel-title">
+              <span>👗 Daftar Produk</span>
+              <div style="display:flex; gap:10px;">
+                <button class="admin-btn admin-btn-secondary admin-btn-sm" onclick="konfirmasiReset()">↺ Reset Default</button>
+                <button class="admin-btn admin-btn-primary" onclick="bukaModalTambah()">+ Tambah Produk</button>
+              </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <input
+                type="text"
+                id="produk-search"
+                placeholder="Cari nama produk..."
+                oninput="renderTabelProduk()"
+                style="width:100%; max-width:340px; padding:10px 16px; border:2px solid var(--pastel-blue); border-radius:12px; outline:none; font-size:14px;"
+              />
+            </div>
+
+            <div style="overflow-x:auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Foto</th>
+                    <th>Nama Produk</th>
+                    <th>Kategori</th>
+                    <th>Harga</th>
+                    <th style="text-align:right;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="produk-table-body"></tbody>
+              </table>
+            </div>
+            <div id="produk-empty" class="admin-empty-state" style="display:none;">
+              Belum ada produk. Klik "+ Tambah Produk" untuk mulai mengisi katalog.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL TAMBAH / EDIT PRODUK -->
+    <div id="modal-produk" class="admin-modal-overlay">
+      <div class="admin-modal-box">
+        <h2 id="modal-produk-title" style="color:#db7a91; margin-bottom:20px;">Tambah Produk</h2>
+        <form id="form-produk" onsubmit="simpanProduk(event)">
+          <input type="hidden" id="produk-id" />
+          <div class="admin-form-group">
+            <label>Nama Produk</label>
+            <input type="text" id="produk-nama" required placeholder="Contoh: Knit Cardigan Premium" />
+          </div>
+          <div class="admin-form-group">
+            <label>Kategori</label>
+            <select id="produk-kategori" required>
+              <option value="Atasan">Atasan</option>
+              <option value="Bawahan">Bawahan</option>
+              <option value="Dress">Dress</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label>Harga (Rp)</label>
+            <input type="number" id="produk-harga" required min="0" step="1000" placeholder="Contoh: 150000" />
+          </div>
+          <div class="admin-form-group">
+            <label>URL Gambar</label>
+            <input type="text" id="produk-gambar" required placeholder="images/nama-file.jpeg" />
+          </div>
+          <div class="admin-form-group">
+            <label>Deskripsi</label>
+            <textarea id="produk-deskripsi" rows="3" required placeholder="Deskripsi singkat produk..."></textarea>
+          </div>
+          <div class="admin-form-group" style="display:flex; align-items:center; gap:10px;">
+            <input type="checkbox" id="produk-bestseller" style="width:auto;" />
+            <label style="margin:0;" for="produk-bestseller">🔥 Tandai sebagai Produk Best Seller</label>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:20px;">
+            <button type="button" class="admin-btn admin-btn-secondary" style="flex:1;" onclick="tutupModalProduk()">Batal</button>
+            <button type="submit" class="admin-btn admin-btn-primary" style="flex:1;">💾 Simpan Produk</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="../js/default_products.js"></script>
+    <script src="../js/store.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+      AdminUI.init({ page: "produk", title: "Produk" });
+
+      function renderTabelProduk() {
+        const query = document.getElementById("produk-search").value.toLowerCase();
+        const products = EB4Store.getProducts().filter((p) =>
+          p.name.toLowerCase().includes(query),
+        );
+        const tbody = document.getElementById("produk-table-body");
+        const emptyState = document.getElementById("produk-empty");
+
+        if (products.length === 0) {
+          tbody.innerHTML = "";
+          emptyState.style.display = "block";
+          return;
+        }
+        emptyState.style.display = "none";
+
+        tbody.innerHTML = products
+          .map(
+            (p) => `
+          <tr>
+            <td><img src="../${p.img}" alt="${p.name}" onerror="this.style.opacity=0.3;"></td>
+            <td><strong>${p.name}</strong> ${p.bestseller ? '<span style="color:#ff6f91; font-size:11px; font-weight:700;">🔥 Best Seller</span>' : ""}</td>
+            <td><span class="admin-category-pill">${p.category}</span></td>
+            <td>${EB4Store.formatRupiah(p.price)}</td>
+            <td style="text-align:right; white-space:nowrap;">
+              <button class="admin-btn admin-btn-secondary admin-btn-sm" onclick="bukaModalEdit(${p.id})">✏️ Edit</button>
+              <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="hapusProduk(${p.id})">🗑️ Hapus</button>
+            </td>
+          </tr>`,
+          )
+          .join("");
+      }
+
+      function bukaModalTambah() {
+        document.getElementById("modal-produk-title").textContent = "Tambah Produk Baru";
+        document.getElementById("form-produk").reset();
+        document.getElementById("produk-id").value = "";
+        document.getElementById("modal-produk").classList.add("active");
+      }
+
+      function bukaModalEdit(id) {
+        const p = EB4Store.getProductById(id);
+        if (!p) return;
+        document.getElementById("modal-produk-title").textContent = "Edit Produk";
+        document.getElementById("produk-id").value = p.id;
+        document.getElementById("produk-nama").value = p.name;
+        document.getElementById("produk-kategori").value = p.category;
+        document.getElementById("produk-harga").value = p.price;
+        document.getElementById("produk-gambar").value = p.img;
+        document.getElementById("produk-deskripsi").value = p.description;
+        document.getElementById("produk-bestseller").checked = !!p.bestseller;
+        document.getElementById("modal-produk").classList.add("active");
+      }
+
+      function tutupModalProduk() {
+        document.getElementById("modal-produk").classList.remove("active");
+      }
+
+      function simpanProduk(e) {
+        e.preventDefault();
+        const id = document.getElementById("produk-id").value;
+        const data = {
+          name: document.getElementById("produk-nama").value.trim(),
+          category: document.getElementById("produk-kategori").value,
+          price: parseInt(document.getElementById("produk-harga").value, 10) || 0,
+          img: document.getElementById("produk-gambar").value.trim(),
+          description: document.getElementById("produk-deskripsi").value.trim(),
+          bestseller: document.getElementById("produk-bestseller").checked,
+        };
+
+        if (id) {
+          EB4Store.updateProduct(id, data);
+        } else {
+          EB4Store.addProduct(data);
+        }
+
+        tutupModalProduk();
+        renderTabelProduk();
+      }
+
+      function hapusProduk(id) {
+        const p = EB4Store.getProductById(id);
+        if (!p) return;
+        if (confirm(`Hapus produk "${p.name}" dari katalog? Tindakan ini tidak bisa dibatalkan.`)) {
+          EB4Store.deleteProduct(id);
+          renderTabelProduk();
+        }
+      }
+
+      function konfirmasiReset() {
+        if (confirm("Kembalikan seluruh katalog ke produk default (bawaan)? Semua perubahan produk yang sudah kamu buat akan hilang.")) {
+          EB4Store.resetProductsToDefault();
+          renderTabelProduk();
+        }
+      }
+
+      renderTabelProduk();
+    </script>
+  </body>
+</html>

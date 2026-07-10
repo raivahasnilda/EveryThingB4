@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Chat | Admin EverythingsByFour</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div class="admin-layout">
+      <aside id="admin-sidebar"></aside>
+
+      <div class="admin-main">
+        <header id="admin-topbar"></header>
+
+        <div class="admin-content">
+          <div class="chat-admin-layout">
+            <div class="chat-admin-list" id="chat-contact-list"></div>
+
+            <div class="chat-admin-thread">
+              <div id="chat-thread-header" class="chat-thread-header" style="display:none;"></div>
+              <div id="chat-thread-messages" class="chat-thread-messages"></div>
+              <form id="chat-thread-form" class="chat-thread-form" style="display:none;" onsubmit="kirimBalasan(event)">
+                <input type="text" id="chat-reply-input" placeholder="Ketik balasan..." autocomplete="off" required />
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/default_products.js"></script>
+    <script src="../js/store.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+      AdminUI.init({ page: "livechat", title: "Live Chat" });
+
+      let activeCustomerId = null;
+
+      function renderContactList() {
+        const conversations = EB4Store.getConversations();
+        const box = document.getElementById("chat-contact-list");
+
+        if (conversations.length === 0) {
+          box.innerHTML = `<div class="chat-admin-list-empty">Belum ada pelanggan yang menghubungi live chat. Notifikasi akan muncul otomatis di sini saat ada pesan baru dari widget chat customer. ✨</div>`;
+          return;
+        }
+
+        box.innerHTML = conversations
+          .map((c) => {
+            const last = c.messages[c.messages.length - 1];
+            return `
+            <div class="chat-contact ${c.customerId === activeCustomerId ? "active" : ""}" onclick="bukaPercakapan('${c.customerId}')">
+              <div class="chat-contact-avatar">${(c.customerName || "?").charAt(0).toUpperCase()}</div>
+              <div style="flex:1; min-width:0;">
+                <div class="chat-contact-name">${c.customerName || "Pelanggan"}</div>
+                <div class="chat-contact-last">${last ? (last.sender === "admin" ? "Anda: " : "") + last.text : "Belum ada pesan"}</div>
+              </div>
+              <div class="chat-contact-time">${last ? EB4Store.timeAgo(last.time) : ""}</div>
+              ${c.unreadForAdmin ? '<span class="chat-contact-unread-dot"></span>' : ""}
+            </div>`;
+          })
+          .join("");
+      }
+
+      function bubbleHtml(msg) {
+        const isAdmin = msg.sender === "admin";
+        return `
+          <div class="chat-bubble ${isAdmin ? "chat-bubble-admin" : "chat-bubble-customer"}">
+            ${escapeHtml(msg.text)}
+            <span class="chat-bubble-time">${EB4Store.formatClock(msg.time)}</span>
+          </div>`;
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      function bukaPercakapan(customerId) {
+        activeCustomerId = customerId;
+        EB4Store.markConversationReadByAdmin(customerId);
+        renderContactList();
+        renderThread();
+        AdminUI.refreshBadges();
+        document.getElementById("chat-reply-input").focus();
+      }
+
+      function renderThread() {
+        const header = document.getElementById("chat-thread-header");
+        const messagesBox = document.getElementById("chat-thread-messages");
+        const form = document.getElementById("chat-thread-form");
+
+        if (!activeCustomerId) {
+          header.style.display = "none";
+          form.style.display = "none";
+          messagesBox.innerHTML = `<div class="chat-thread-empty">👈 Pilih salah satu pelanggan di sebelah kiri untuk mulai membalas chat, seperti WhatsApp Web.</div>`;
+          return;
+        }
+
+        const conv = EB4Store.getConversation(activeCustomerId);
+        if (!conv) {
+          activeCustomerId = null;
+          renderThread();
+          return;
+        }
+
+        header.style.display = "flex";
+        header.innerHTML = `
+          <div class="chat-contact-avatar">${(conv.customerName || "?").charAt(0).toUpperCase()}</div>
+          <div>
+            <div class="chat-contact-name">${conv.customerName || "Pelanggan"}</div>
+            <div class="chat-contact-last" style="max-width:none;">ID Sesi: ${conv.customerId}</div>
+          </div>
+        `;
+        form.style.display = "flex";
+
+        messagesBox.innerHTML = conv.messages.map(bubbleHtml).join("");
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+      }
+
+      function kirimBalasan(e) {
+        e.preventDefault();
+        const input = document.getElementById("chat-reply-input");
+        const text = input.value.trim();
+        if (!text || !activeCustomerId) return;
+        EB4Store.sendAdminMessage(activeCustomerId, text);
+        input.value = "";
+        renderThread();
+        renderContactList();
+      }
+
+      renderContactList();
+      renderThread();
+
+      // Live update: pesan baru dari customer (tab lain) langsung tampil
+      window.onAdminDataChange = function () {
+        renderContactList();
+        if (activeCustomerId) renderThread();
+      };
+
+      // Fallback polling ringan (jaga-jaga kalau event 'storage' tidak terpicu)
+      setInterval(() => {
+        renderContactList();
+        if (activeCustomerId) renderThread();
+      }, 3000);
+    </script>
+  </body>
+</html>
